@@ -1,18 +1,10 @@
-Go 1.6 release party
-YOUR MEETUP
+Go 1.6 Release Party
+Kiev
 17 Feb 2016
 
-YOUR NAME
-@YOURTWITTER
+Alexey Grachov
+@yanzay
 http://talks.godoc.org/github.com/davecheney/gosyd/go1.6.slide
-
-* DEMONSTRATIONS
-
-THE CODE SAMPLES IN THIS SLIDE DECK REQUIRE GO 1.6
-
-THEY WILL NOT WORK FROM TALKS.GOLANG.ORG UNTIL AFTER GO 1.6 IS RELEASED
-
-TO RUN THEM LOCALLY YOU WILL NEED GO 1.6BETA1 OR LATER
 
 * Welcome
 
@@ -111,6 +103,14 @@ At [[http://www.infoq.com/presentations/go-gc-performance][QCon SF in November R
 
 _Yes,_that_is_gigabytes_on_the_X_axis_
 
+* Go 1.5 @brianhatfield
+
+.image go1.6/gc15.png 400 _
+
+* Go 1.6 RC1 @brianhatfield
+
+.image go1.6/gc16.jpg 400 _
+
 * HTTP/2
 
 Go 1.6 adds transparent support in the `net/http` package for the new HTTP/2 protocol.
@@ -149,8 +149,6 @@ Fixing the code in question should be strongly preferred over turning off the ch
 Externally the compiler toolchain is mostly unchanged compared to Go 1.5.
 
 Internally, the most significant change is that the parser is now hand-written instead of generated from yacc.
-
-The new SSA compiler backend is slated to land, for amd64 only at this stage, in Go 1.7.
 
 * Changes to the -X flag
 
@@ -240,9 +238,7 @@ The most likely problem caused by enabling vendoring by default happens in sourc
 
 `server-two` uses the `mux` package in
 
-	$GOPATH/src/github.com/gorilla/mux/vendor/github.com/gorilla/mux
-
-* Vendoring (demo)
+	$GOPATH/src/server-two/vendor/github.com/gorilla/mux
 
 * Vendoring gotchas
 
@@ -340,18 +336,6 @@ Joe Tsai has put a lot of effort into the archive/tar package, correcting many b
 
 One visible change is that the Reader type's Read method now presents the content of special file types as being empty, returning `io.EOF` immediately.
 
-* bufio
-
-The bufio package's Scanner type now has a Buffer method, to specify an initial buffer and maximum buffer size to use during scanning.
-
-This makes it possible, when needed, to scan tokens larger than MaxScanTokenSize.
-
-Also for the Scanner, the package now defines the ErrFinalToken error value, for use by split functions to abort processing or to return a final empty token.
-
-* bufio (example)
-
-.play go1.6/scan.go /START OMIT/,/END OMIT/
-
 * net/* changes
 
 The net/http package has a number of minor additions beyond the HTTP/2 support already discussed.
@@ -384,29 +368,6 @@ Read more
 
 - [[https://golang.org/pkg/net/#hdr-Name_Resolution][Name resolution section]] of the `net` package documentation.
 
-* os
-
-The os package's `IsExist`, `IsNotExist`, and `IsPermission` now return correct results when inquiring about a `SyscallError`.
-
-On Unix-like systems, when a write to `os.Stdout` or `os.Stderr` fails due to a broken pipe error, the program will raise a `SIGPIPE` signal. By default this will cause the program to exit; this may be changed by calling the `os/signal.Notify` function for `syscall.SIGPIPE`. 
-
-In Go 1.6 a write to a broken pipe on a file descriptor other 1 or 2 will simply return `syscall.EPIPE` (possibly wrapped in `os.PathError` and/or `os.SyscallError`) to the caller.
-
-The old behavior of raising an uncatchable SIGPIPE signal after 10 consecutive writes to a broken pipe no longer occurs.
-
-* regexp
-
-In the regexp package, the Regexp type has always been safe for use by concurrent goroutines.
-
-Some high-concurrency servers using the same Regexp from many goroutines have seen degraded performance due to contention on a mutex protecting a cache of scratch spaces used during regular expression searches.
-
-To help such servers, Regexp now has a Copy method, which makes a copy of a Regexp that shares most of the structure of the original but has its own scratch space cache.
-
-    re1 := regexp.MustCompile(`^(?P<root>github\.com/([A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+))(/[A-Za-z0-9_.\-]+)*$`)
-    re2 := re1.Copy()
-
-A copy does have additional space overhead, so Copy should only be used when contention has been observed.
-
 * time
 
 The time package's Parse function has always rejected any day of month larger than 31, such as January 32.
@@ -420,5 +381,3 @@ In Go 1.6, Parse now also rejects February 29 in non-leap years, February 30, Fe
 .link https://golang.org/dl/
 
 .image go1.6/GoLaunch_Front.png 440 _
-
-_Credit_: [[http://www.meetup.com/golangsf/events/226090306/][iron.io / GoSF Meetup]].

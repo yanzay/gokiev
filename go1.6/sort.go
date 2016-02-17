@@ -7,7 +7,8 @@ import (
 
 // START OMIT
 type People struct{ first, last string }
-func (p People) String() string { return p.first+" "+p.last }
+
+func (p People) String() string { return p.first + " " + p.last }
 
 type ByFirstName []People
 
@@ -20,9 +21,10 @@ func main() {
 		{"Bill", "Clinton"}, {"Romeo", "Capulet"},
 		{"Bill", "Cosby"}, {"Juliet", "Montague"},
 		{"Bill", "Gates"}, {"Walter", "White"},
-		{"April", "O'Neal"},
+		{"Allan", "Poe"},
 	}
 	sort.Sort(ByFirstName(people))
 	fmt.Println(people)
 }
+
 // END OMIT
